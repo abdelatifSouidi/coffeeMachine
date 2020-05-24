@@ -10,6 +10,7 @@ public class CustomerMessage {
         drinks.put(Drink.TEA,"tea");
         drinks.put(Drink.CHOCOLATE,"chocolate");
         drinks.put(Drink.COFFEE,"coffee");
+        drinks.put(Drink.ORANGE_JUICE, "orange juice");
     }
 
     public String displayCustomerMessage(Order order){
@@ -26,7 +27,13 @@ public class CustomerMessage {
                           .append(" euro plesae top up").toString();
 
         initDrinks();
-        message.append("Drink maker makes 1 ")
+        message.append("Drink maker will make ");
+
+
+        if(!order.getDrink().isHotDrink())
+            return message.append("one ")
+                    .append(drinks.get(order.getDrink())).toString();
+        message.append("an extra hot ")
                 .append(drinks.get(order.getDrink()))
                 .append(" with ");
         if (order.getNumberOfSugar() > 0) {

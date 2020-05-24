@@ -4,7 +4,9 @@ public enum Drink {
 
     COFFEE('C',0.6),
 
-    CHOCOLATE('H',0.5);
+    CHOCOLATE('H',0.5),
+
+    ORANGE_JUICE('O',0.6);
 
     char code;
     double price;
@@ -16,5 +18,9 @@ public enum Drink {
 
     public boolean hasNotEnoughMoney(Double money) {
         return price > money;
+    }
+
+    public boolean isHotDrink() {
+        return code != Drink.ORANGE_JUICE.code;
     }
 }

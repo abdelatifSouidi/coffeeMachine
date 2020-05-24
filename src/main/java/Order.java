@@ -26,8 +26,10 @@ public class Order {
     public String translateOrderToCoffeeMaker() {
         StringBuilder Instruction = new StringBuilder();
 
-        Instruction.append(drink.code)
-                .append(":");
+        Instruction.append(drink.code);
+        if(drink.isHotDrink())
+            Instruction.append("h");
+        Instruction.append(":");
         if(numberOfSugar > 0)
             Instruction.append(numberOfSugar);
         Instruction.append(":").append(stick);
