@@ -1,21 +1,20 @@
-import java.util.HashMap;
-
 public enum Drink {
 
-    TEA('T'),
+    TEA('T',0.4),
 
-    COFFEE('C'),
+    COFFEE('C',0.6),
 
-    CHOCOLATE('H');
+    CHOCOLATE('H',0.5);
 
     char code;
+    double price;
 
-    Drink(char code) {
+    Drink(char code, Double price) {
         this.code = code;
+        this.price = price;
     }
 
-    @Override
-    public String toString() {
-        return  String.valueOf(code);
+    public boolean hasNotEnoughMoney(Double money) {
+        return price > money;
     }
 }

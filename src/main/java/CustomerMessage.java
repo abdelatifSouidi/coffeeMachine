@@ -3,7 +3,7 @@ import java.util.EnumMap;
 public class CustomerMessage {
 
     private StringBuilder message;
-    EnumMap<Drink,String> drinks;
+    private EnumMap<Drink,String> drinks;
 
     public void initDrinks(){
         drinks = new EnumMap<>(Drink.class);
@@ -14,11 +14,16 @@ public class CustomerMessage {
 
     public String displayCustomerMessage(Order order){
         message = new StringBuilder();
-        if(order.message != null)
+        if(order.getMessage() != null)
             return message.append("Drink maker forwards any message received")
                     .append(" onto the coffee machine interface")
                     .append(" for the customer to see")
                     .toString();
+
+        if(order.getDrink().hasNotEnoughMoney(order.getMoney()))
+            return message.append("not enough money, missing ")
+                          .append(order.getDrink().price - order.getMoney())
+                          .append(" euro plesae top up").toString();
 
         initDrinks();
         message.append("Drink maker makes 1 ")
