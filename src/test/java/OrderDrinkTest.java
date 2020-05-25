@@ -1,4 +1,8 @@
 
+import com.domain.CoffeeMaker;
+import com.domain.CoffeeMakerDriver;
+import com.domain.Drink;
+import com.domain.Order;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,12 +11,11 @@ import static org.junit.Assert.assertEquals;
 
 public class OrderDrinkTest {
 
-    private CustomerMessage message;
     private CoffeeMaker coffeeMaker;
+    private CoffeeMakerDriver coffeeMakerDriver;
     private Order orderTeaWithOneSugar ;
     private Order orderChocolateWithoutSugar ;
     private Order orderCoffeeWithTwoSugar ;
-    private Order orderMessage ;
     private Order OrderTeaWithOneSugarAndEnoughMoney;
     private Order orderChocolateWithoutSugarAndWithoutEnoughMoney ;
     private Order orderCoffeeWithTwoSugarAndWithoutEnoughMoney ;
@@ -20,12 +23,10 @@ public class OrderDrinkTest {
 
     @Before
     public void init (){
-        message = new CustomerMessage();
         coffeeMaker = new CoffeeMaker();
         orderTeaWithOneSugar = new Order(Drink.TEA, 1,0.4);
         orderChocolateWithoutSugar=new Order(Drink.CHOCOLATE,0.5);
         orderCoffeeWithTwoSugar =  new Order(Drink.COFFEE, 2,0.6);
-        orderMessage = new Order("message-content");
         OrderTeaWithOneSugarAndEnoughMoney = new Order(Drink.TEA, 1,0.4);
         orderChocolateWithoutSugarAndWithoutEnoughMoney=new Order(Drink.CHOCOLATE,0.2);
         orderCoffeeWithTwoSugarAndWithoutEnoughMoney=  new Order(Drink.COFFEE,2, 0.1);
@@ -34,37 +35,47 @@ public class OrderDrinkTest {
 
     @Test
     public void shouldReceiveAvailableInstructionAndSendAvailableCustomerMessage(){
-        assertEquals("Th:1:0",coffeeMaker.sendOrder(orderTeaWithOneSugar));
+        coffeeMakerDriver = new CoffeeMakerDriver(orderTeaWithOneSugar);
+        assertEquals("Th:1:0",coffeeMakerDriver.send());
         assertEquals("Drink maker will make an extra hot tea with 1 sugar and a stick"
-                ,message.displayCustomerMessage(orderTeaWithOneSugar));
-        assertEquals("Hh::",coffeeMaker.sendOrder(orderChocolateWithoutSugar));
+                , coffeeMaker.makeDrink(coffeeMakerDriver));
+        coffeeMakerDriver = new CoffeeMakerDriver(orderChocolateWithoutSugar);
+        assertEquals("Hh::",coffeeMakerDriver.send());
         assertEquals("Drink maker will make an extra hot chocolate with no sugar - and therefore no stick"
-                ,message.displayCustomerMessage(orderChocolateWithoutSugar));
-        assertEquals("Ch:2:0",coffeeMaker.sendOrder(orderCoffeeWithTwoSugar));
+                , coffeeMaker.makeDrink(coffeeMakerDriver));
+        coffeeMakerDriver = new CoffeeMakerDriver(orderCoffeeWithTwoSugar);
+        assertEquals("Ch:2:0",coffeeMakerDriver.send());
         assertEquals("Drink maker will make an extra hot coffee with 2 sugars and a stick"
-                ,message.displayCustomerMessage(orderCoffeeWithTwoSugar));
-        assertEquals("M:message-content",coffeeMaker.sendMessage(orderMessage));
+                , coffeeMaker.makeDrink(coffeeMakerDriver));
+        coffeeMakerDriver = new CoffeeMakerDriver("coffeeMaker-content");
+        assertEquals("M:coffeeMaker-content",coffeeMakerDriver.send());
         assertEquals("Drink maker forwards any message received onto the coffee machine interface for the customer to see"
-                ,message.displayCustomerMessage(orderMessage));
+                , coffeeMaker.receiveMessage());
     }
 
     @Test
     public void shouldMakeDrinkOnlyIfHasEnoughMoney (){
-        assertEquals("Th:1:0",coffeeMaker.sendOrder(OrderTeaWithOneSugarAndEnoughMoney));
+        coffeeMakerDriver = new CoffeeMakerDriver(OrderTeaWithOneSugarAndEnoughMoney);
+        assertEquals("Th:1:0",coffeeMakerDriver.send());
         assertEquals("Drink maker will make an extra hot tea with 1 sugar and a stick"
-                ,message.displayCustomerMessage(orderTeaWithOneSugar));
-        assertEquals("missing money",coffeeMaker.sendOrder(orderChocolateWithoutSugarAndWithoutEnoughMoney));
+                , coffeeMaker.makeDrink(coffeeMakerDriver));
+        coffeeMakerDriver = new CoffeeMakerDriver(orderChocolateWithoutSugarAndWithoutEnoughMoney);
+        assertEquals("missing money",coffeeMakerDriver.send());
         assertEquals("not enough money, missing 0.3 euro plesae top up"
-                ,message.displayCustomerMessage(orderChocolateWithoutSugarAndWithoutEnoughMoney));;
-        assertEquals("missing money",coffeeMaker.sendOrder(orderCoffeeWithTwoSugarAndWithoutEnoughMoney));
+                , coffeeMaker.makeDrink(coffeeMakerDriver));
+        coffeeMakerDriver = new CoffeeMakerDriver(orderCoffeeWithTwoSugarAndWithoutEnoughMoney);
+        assertEquals("missing money",coffeeMakerDriver.send());
         assertEquals("not enough money, missing 0.5 euro plesae top up"
-                ,message.displayCustomerMessage(orderCoffeeWithTwoSugarAndWithoutEnoughMoney));
+                , coffeeMaker.makeDrink(coffeeMakerDriver));
     }
 
     @Test
     public void shouldMakeDrinkHotOrCold(){
-        assertEquals("O::",coffeeMaker.sendOrder(orderOrangeJuice));
+        coffeeMakerDriver = new CoffeeMakerDriver(orderOrangeJuice);
+        assertEquals("O::",coffeeMakerDriver.send());
         assertEquals("Drink maker will make one orange juice"
-                ,message.displayCustomerMessage(orderOrangeJuice));
+                , coffeeMaker.makeDrink(coffeeMakerDriver));
     }
+
+
 }

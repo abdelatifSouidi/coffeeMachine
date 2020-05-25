@@ -1,14 +1,11 @@
+package com.domain;
+
 public class Order {
 
     private int numberOfSugar;
     private String stick;
     private Drink drink;
     private Double money;
-    private String message;
-
-    public Order (String message){
-        this.message = message;
-    }
 
     public Order (Drink drink, Double money){
         this.drink= drink;
@@ -23,24 +20,6 @@ public class Order {
         this.money = money;
     }
 
-    public String translateOrderToCoffeeMaker() {
-        StringBuilder Instruction = new StringBuilder();
-
-        Instruction.append(drink.code);
-        if(drink.isHotDrink())
-            Instruction.append("h");
-        Instruction.append(":");
-        if(numberOfSugar > 0)
-            Instruction.append(numberOfSugar);
-        Instruction.append(":").append(stick);
-
-        return Instruction.toString();
-    }
-
-    public String translateMessageToCoffeeMaker(){
-        return "M:"+ message;
-    }
-
     public int getNumberOfSugar() {
         return numberOfSugar;
     }
@@ -53,7 +32,7 @@ public class Order {
         return money;
     }
 
-    public String getMessage() {
-        return message;
+    public String getStick() {
+        return stick;
     }
 }

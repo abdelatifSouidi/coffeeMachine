@@ -1,3 +1,5 @@
+package com.domain;
+
 public enum Drink {
 
     TEA('T',0.4),
