@@ -1,11 +1,17 @@
 package com.domain;
 
+import com.domain.Management.BeverageQuantityCheckerImpl;
+import com.domain.Management.EmailNotifier;
+import com.domain.Management.EmailNotifierImpl;
+
 import java.util.EnumMap;
 
 public class CoffeeMaker {
 
     private StringBuilder message;
     private EnumMap<Drink,String> drinks;
+    private BeverageQuantityCheckerImpl beverageQuantityChecker;
+    private EmailNotifier emailNotifier;
 
     public CoffeeMaker() {
         initDrinks();
@@ -21,7 +27,16 @@ public class CoffeeMaker {
 
     public String makeDrink(CoffeeMakerDriver coffeeMaker){
         message = new StringBuilder();
+        beverageQuantityChecker = new BeverageQuantityCheckerImpl();
         Order order = coffeeMaker.getOrder();
+
+        if(beverageQuantityChecker.hasEmptyStock(order.getDrink())){
+            emailNotifier = new EmailNotifierImpl();
+            emailNotifier.notifyMissingDrink(order.getDrink().toString());
+            return new  StringBuilder("Sorry, there's no more ")
+                    .append(order.getDrink().toString().toLowerCase())
+                    .append(" a notification has been sent.").toString();
+        }
 
         if(order.getDrink().hasNotEnoughMoney(order.getMoney()))
             return cantMakeDrink(order);
